@@ -7,7 +7,7 @@ def calculate_derivative_coefficients(coefficients):
         return 0
 
     derivative_coefficients = []
-    for i in range(n):
+    for i in range(1, n):
         derivative_coefficients.append(coefficients[i] * i)
 
     return derivative_coefficients

@@ -9,7 +9,7 @@ class Horner:
         else:
             result = self.coefficients[degree]
 
-        for i in range(degree - 1, 0):
+        for i in range(degree - 1, -1, -1):
             result = result * x + self.coefficients[i]
 
         return result
