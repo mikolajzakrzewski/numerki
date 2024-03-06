@@ -27,11 +27,10 @@ class Bisection:
         for i in range(iterations):
             x0 = x1
             if self.function.evaluate(self.a) * self.function.evaluate(x0) < 0:
-                self.b =x0
+                self.b = x0
             else:
                 self.a = x0
 
             x1 = (self.a + self.b) / 2
 
         return x1
-
