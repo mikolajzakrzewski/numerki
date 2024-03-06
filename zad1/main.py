@@ -26,7 +26,7 @@ if __name__ == '__main__':
             degree = int(input())
             print('Podaj wspolczynniki wielomianu od najwyzszego:')
             coefficients = []
-            for i in range(degree):
+            for i in range(degree + 1):
                 coefficients.append(float(input()))
 
             function = PolynomialFunction.PolynomialFunction(coefficients)

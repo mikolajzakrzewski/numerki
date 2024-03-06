@@ -7,7 +7,8 @@ class Bisection:
     def bisection(self, epsilon):
         x0 = (self.a + self.b) / 2
         x1 = x0
-        while abs(x0 - x1) > epsilon:
+        epsilon_reached = False
+        while not epsilon_reached:
             x0 = x1
             if self.function.evaluate(self.a) * self.function.evaluate(x0) < 0:
                 self.b = x0
@@ -15,6 +16,8 @@ class Bisection:
                 self.a = x0
 
             x1 = (self.a + self.b) / 2
+            if abs(x0 - x1) <= epsilon:
+                epsilon_reached = True
 
         return x1
 
