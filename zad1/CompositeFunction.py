@@ -7,6 +7,4 @@ class CompositeFunction:
         return self.function_1.evaluate(self.function_2.evaluate(x))
 
     def derivative(self, x):
-        print(self.function_2.evaluate(x))
-        print(self.function_1.derivative(self.function_2.evaluate(x)))
         return self.function_1.derivative(self.function_2.evaluate(x)) * self.function_2.derivative(x)
