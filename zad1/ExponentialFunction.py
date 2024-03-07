@@ -6,11 +6,10 @@ class ExponentialFunction:
         self.base = base
 
     def evaluate(self, x):
-        result = 1.0
-        for i in range(int(x)):
-            result *= self.base
-
-        return result
+        return self.base ** x
 
     def derivative(self, x):
-        return self.evaluate(x) * math.log(self.base)
+        if self.base > 0:
+            return self.evaluate(x) * math.log(self.base)
+        else:
+            raise ValueError("Podstawa wykładnicza musi być większa od zera.")

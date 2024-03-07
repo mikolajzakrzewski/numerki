@@ -1,7 +1,7 @@
 import math
 
 
-class SinusFunction:
+class CosineFunction:
     pass
 
     def evaluate(self, x):
