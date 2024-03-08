@@ -1,11 +1,11 @@
-import math
+import numpy as np
 
 
 class CosineFunction:
     pass
 
     def evaluate(self, x):
-        return math.cos(x)
+        return np.cos(x)
 
     def derivative(self, x):
-        return -1*math.sin(x)
+        return -1 * np.sin(x)

@@ -1,11 +1,11 @@
-import math
+import numpy as np
 
 
 class TangentFunction:
     pass
 
     def evaluate(self, x):
-        return math.tan(x)
+        return np.tan(x)
 
     def derivative(self, x):
-        return 1/(math.cos(x)*math.cos(x))
+        return 1 / (np.cos(x) * np.cos(x))

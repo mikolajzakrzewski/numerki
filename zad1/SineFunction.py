@@ -1,11 +1,11 @@
-import math
+import numpy as np
 
 
 class SineFunction:
     pass
 
     def evaluate(self, x):
-        return math.sin(x)
+        return np.sin(x)
 
     def derivative(self, x):
-        return math.cos(x)
+        return np.cos(x)

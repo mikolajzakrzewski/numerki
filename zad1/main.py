@@ -7,6 +7,9 @@ import TangentFunction
 import Tangents
 import CompositeFunction
 
+import numpy as np
+from matplotlib import pyplot as plt
+
 
 def function_choice():
     chosen_function = input()
@@ -48,6 +51,17 @@ def range_choice():
     return start, end
 
 
+def plot_function(range_start, range_end, function_to_plot, bisection_zero_point, tangents_zero_point):
+    x = np.linspace(range_start, range_end, int((range_end - range_start) * 10))
+    plt.plot(x, function_to_plot.evaluate(x))
+    plt.plot(bisection_zero_point, 0, 'o', label='Miejsce zerowe obliczone metodą bisekcji')
+    plt.plot(tangents_zero_point, 0, 'o', label='Miejsce zerowe obliczone metodą stycznych')
+    plt.xlabel('x', fontsize=14)
+    plt.ylabel('y', fontsize=14)
+    plt.legend(loc='upper right')
+    plt.show()
+
+
 def main():
     while True:
         print('--------------------Program do znajdowania miejsca zerowego równań nieliniowych--------------------')
@@ -59,7 +73,7 @@ def main():
         elif choice == '2':
             print('Wybierz pierwszą funkcję: \n1. Trygonometryczna\n2. Wykładnicza\n3. Wielomian')
             function_1 = function_choice()
-            print('Wybierz drugąfunkcję: \n1. Trygonometryczna\n2. Wykładnicza\n3. Wielomian')
+            print('Wybierz drugą funkcję: \n1. Trygonometryczna\n2. Wykładnicza\n3. Wielomian')
             function_2 = function_choice()
             function = CompositeFunction.CompositeFunction(function_1, function_2)
 
@@ -76,6 +90,7 @@ def main():
             result_tangents = tangents.tangents(epsilon)
             print('Miejsce zerowe funkcji obliczone metodą bisekcji: ' + str(result_bisection))
             print('Miejsce zerowe funkcji obliczone metodą stycznych: ' + str(result_tangents))
+            plot_function(a, b, function, result_bisection, result_tangents)
         elif method_choice == '2':
             print('Podaj liczbę iteracji:')
             iterations = int(input())
@@ -85,6 +100,7 @@ def main():
             result_tangents = tangents_iterations.tangents_iterations(iterations)
             print('Miejsce zerowe funkcji obliczone metodą bisekcji: ' + str(result_bisection))
             print('Miejsce zerowe funkcji obliczone metodą stycznych: ' + str(result_tangents))
+            plot_function(a, b, function, result_bisection, result_tangents)
         else:
             print('Niepoprawny wybór.')
 
