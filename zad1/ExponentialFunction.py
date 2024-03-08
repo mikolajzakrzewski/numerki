@@ -1,4 +1,4 @@
-import math
+import numpy as np
 
 
 class ExponentialFunction:
@@ -6,10 +6,10 @@ class ExponentialFunction:
         self.base = base
 
     def evaluate(self, x):
-        return self.base ** x
+        return -(-self.base) ** x
 
     def derivative(self, x):
         if self.base > 0:
-            return self.evaluate(x) * math.log(self.base)
+            return self.evaluate(x) * np.log(self.base)
         else:
             raise ValueError("Podstawa wykładnicza musi być większa od zera.")
