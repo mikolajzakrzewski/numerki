@@ -6,7 +6,7 @@ class ExponentialFunction:
         self.base = base
 
     def evaluate(self, x):
-        return -(-self.base) ** x
+        return self.base ** x
 
     def derivative(self, x):
         if self.base > 0:
