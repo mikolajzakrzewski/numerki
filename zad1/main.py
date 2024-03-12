@@ -94,8 +94,8 @@ def main():
             bisection = Bisection.Bisection(a, b, function)
             tangents = Tangents.Tangents(a, b, function)
             result_bisection = bisection.bisection(epsilon)
-            result_tangents = tangents.tangents(epsilon)
             print('Miejsce zerowe funkcji obliczone metodą bisekcji: ' + str(result_bisection))
+            result_tangents = tangents.tangents(epsilon)
             print('Miejsce zerowe funkcji obliczone metodą stycznych: ' + str(result_tangents))
             plot_function(a, b, function, result_bisection, result_tangents)
         elif method_choice == '2':
@@ -104,8 +104,8 @@ def main():
             bisection_iterations = Bisection.Bisection(a, b, function)
             tangents_iterations = Tangents.Tangents(a, b, function)
             result_bisection = bisection_iterations.bisection_iterations(iterations)
-            result_tangents = tangents_iterations.tangents_iterations(iterations)
             print('Miejsce zerowe funkcji obliczone metodą bisekcji: ' + str(result_bisection))
+            result_tangents = tangents_iterations.tangents_iterations(iterations)
             print('Miejsce zerowe funkcji obliczone metodą stycznych: ' + str(result_tangents))
             plot_function(a, b, function, result_bisection, result_tangents)
         else:
