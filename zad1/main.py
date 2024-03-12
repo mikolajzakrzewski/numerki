@@ -54,12 +54,16 @@ def plot_function(range_start, range_end, function_to_plot, bisection_zero_point
     x = np.linspace(range_start, range_end, 10000)
     plt.figure(figsize=(8, 8))
     plt.plot(x, function_to_plot.evaluate(x), label='Wykres funkcji f(x)')
-    plt.plot(
-        bisection_zero_point, 0, 'o', label='Miejsce zerowe obliczone metodą bisekcji: ' + str(bisection_zero_point)
-    )
-    plt.plot(
-        tangents_zero_point, 0, 'o', label='Miejsce zerowe obliczone metodą stycznych: ' + str(tangents_zero_point)
-    )
+    if bisection_zero_point is not None:
+        plt.plot(
+            bisection_zero_point, 0, 'o', label='Miejsce zerowe obliczone metodą bisekcji: ' + str(bisection_zero_point)
+        )
+
+    if tangents_zero_point is not None:
+        plt.plot(
+            tangents_zero_point, 0, 'o', label='Miejsce zerowe obliczone metodą stycznych: ' + str(tangents_zero_point)
+        )
+
     plt.xlabel('x', fontsize=14)
     plt.ylabel('y', fontsize=14)
     plt.legend(loc='upper right')
