@@ -19,6 +19,10 @@ class Bisection:
             if abs(x0 - x1) <= epsilon:
                 epsilon_reached = True
 
+            if x1 < self.a or x1 > self.b:
+                print("Błąd. Miejsce zerowe nie znajduje się w podanym przedziale.")
+                return None
+
         return x1
 
     def bisection_iterations(self, iterations):
@@ -33,4 +37,7 @@ class Bisection:
 
             x1 = (self.a + self.b) / 2
 
+            if x1 < self.a or x1 > self.b:
+                print("Błąd. Miejsce zerowe nie znajduje się w podanym przedziale.")
+                return None
         return x1

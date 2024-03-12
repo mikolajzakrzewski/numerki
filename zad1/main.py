@@ -27,9 +27,7 @@ def function_choice():
     elif chosen_function == '2':
         print('Podaj podstawe funkcji(a):')
         base = float(input())
-        print('Podaj stałą c:')
-        constant = float(input())
-        return ExponentialFunction.ExponentialFunction(base, constant)
+        return ExponentialFunction.ExponentialFunction(base)
 
     elif chosen_function == '3':
         print('Podaj stopien wielomianu:')
@@ -94,8 +92,8 @@ def main():
             bisection = Bisection.Bisection(a, b, function)
             tangents = Tangents.Tangents(a, b, function)
             result_bisection = bisection.bisection(epsilon)
-            print('Miejsce zerowe funkcji obliczone metodą bisekcji: ' + str(result_bisection))
             result_tangents = tangents.tangents(epsilon)
+            print('Miejsce zerowe funkcji obliczone metodą bisekcji: ' + str(result_bisection))
             print('Miejsce zerowe funkcji obliczone metodą stycznych: ' + str(result_tangents))
             plot_function(a, b, function, result_bisection, result_tangents)
         elif method_choice == '2':
@@ -104,8 +102,8 @@ def main():
             bisection_iterations = Bisection.Bisection(a, b, function)
             tangents_iterations = Tangents.Tangents(a, b, function)
             result_bisection = bisection_iterations.bisection_iterations(iterations)
-            print('Miejsce zerowe funkcji obliczone metodą bisekcji: ' + str(result_bisection))
             result_tangents = tangents_iterations.tangents_iterations(iterations)
+            print('Miejsce zerowe funkcji obliczone metodą bisekcji: ' + str(result_bisection))
             print('Miejsce zerowe funkcji obliczone metodą stycznych: ' + str(result_tangents))
             plot_function(a, b, function, result_bisection, result_tangents)
         else:
