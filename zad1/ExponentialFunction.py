@@ -2,11 +2,12 @@ import numpy as np
 
 
 class ExponentialFunction:
-    def __init__(self, base):
+    def __init__(self, base, constant=0):
         self.base = base
+        self.constant = constant
 
     def evaluate(self, x):
-        return self.base ** x
+        return self.constant + self.base ** x
 
     def derivative(self, x):
         if self.base > 0:

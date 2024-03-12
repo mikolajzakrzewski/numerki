@@ -27,9 +27,10 @@ def function_choice():
     elif chosen_function == '2':
         print('Podaj podstawe funkcji(a):')
         base = float(input())
-        # print('Podaj stala c:')
-        # constant = float(input())
-        return ExponentialFunction.ExponentialFunction(base)
+        print('Podaj stałą c:')
+        constant = float(input())
+        return ExponentialFunction.ExponentialFunction(base, constant)
+
     elif chosen_function == '3':
         print('Podaj stopien wielomianu:')
         degree = int(input())
