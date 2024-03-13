@@ -2,13 +2,13 @@ import Horner
 
 
 def calculate_derivative_coefficients(coefficients):
-    n = len(coefficients)
+    n = len(coefficients) - 1
     if n <= 1:
         return 0
 
     derivative_coefficients = []
-    for i in range(1, n):
-        derivative_coefficients.append(coefficients[i] * i)
+    for i in range(n):
+        derivative_coefficients.append(coefficients[i] * (n - i))
 
     return derivative_coefficients
 
