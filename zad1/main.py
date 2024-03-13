@@ -95,20 +95,32 @@ def main():
             epsilon = float(input())
             bisection = Bisection.Bisection(a, b, function)
             tangents = Tangents.Tangents(a, b, function)
-            result_bisection = bisection.bisection(epsilon)
-            result_tangents = tangents.tangents(epsilon)
-            print('Miejsce zerowe funkcji obliczone metodą bisekcji: ' + str(result_bisection))
-            print('Miejsce zerowe funkcji obliczone metodą stycznych: ' + str(result_tangents))
+            result_bisection, result_bisection_iterations = bisection.bisection(epsilon)
+            result_tangents, result_tangents_iterations = tangents.tangents(epsilon)
+            print('Miejsce zerowe funkcji obliczone metodą bisekcji: '
+                  + str(result_bisection)
+                  + ', liczba iteracji: '
+                  + str(result_bisection_iterations))
+            print('Miejsce zerowe funkcji obliczone metodą stycznych: '
+                  + str(result_tangents)
+                  + ', liczba iteracji: '
+                  + str(result_tangents_iterations))
             plot_function(a, b, function, result_bisection, result_tangents)
         elif method_choice == '2':
             print('Podaj liczbę iteracji:')
             iterations = int(input())
             bisection_iterations = Bisection.Bisection(a, b, function)
             tangents_iterations = Tangents.Tangents(a, b, function)
-            result_bisection = bisection_iterations.bisection_iterations(iterations)
-            result_tangents = tangents_iterations.tangents_iterations(iterations)
-            print('Miejsce zerowe funkcji obliczone metodą bisekcji: ' + str(result_bisection))
-            print('Miejsce zerowe funkcji obliczone metodą stycznych: ' + str(result_tangents))
+            result_bisection, result_bisection_precision = bisection_iterations.bisection_iterations(iterations)
+            result_tangents, result_tangents_precision = tangents_iterations.tangents_iterations(iterations)
+            print('Miejsce zerowe funkcji obliczone metodą bisekcji: '
+                  + str(result_bisection)
+                  + ', osiągnięta dokładność: '
+                  + str(result_bisection_precision))
+            print('Miejsce zerowe funkcji obliczone metodą stycznych: '
+                  + str(result_tangents)
+                  + ', osiągnięta dokładność: '
+                  + str(result_tangents_precision))
             plot_function(a, b, function, result_bisection, result_tangents)
         else:
             print('Niepoprawny wybór.')
