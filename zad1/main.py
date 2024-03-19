@@ -47,12 +47,7 @@ def range_choice():
     start = float(input())
     print('Podaj koniec przedziału b:')
     end = float(input())
-
-    if start * end > 0:
-        print("Podane krańce przedziału mają ten sam znak.")
-        return range_choice()
-    else:
-        return start, end
+    return start, end
 
 
 def plot_function(range_start, range_end, function_to_plot, bisection_zero_point, tangents_zero_point):

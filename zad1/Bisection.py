@@ -5,6 +5,11 @@ class Bisection:
         self.function = function
 
     def bisection(self, epsilon):
+        if self.function.evaluate(self.a) * self.function.evaluate(self.b) >= 0:
+            print(
+                "Uwaga: na krańcach badanego przedziału funkcja nie ma przeciwnych znaków, brak gwarancji rozwiązania."
+            )
+
         x0 = (self.a + self.b) / 2
         x1 = x0
         epsilon_reached = False
@@ -29,6 +34,11 @@ class Bisection:
         return x1, iterations
 
     def bisection_iterations(self, iterations):
+        if self.function.evaluate(self.a) * self.function.evaluate(self.b) >= 0:
+            print(
+                "Uwaga: na krańcach badanego przedziału funkcja nie ma przeciwnych znaków, brak gwarancji rozwiązania."
+            )
+
         x0 = (self.a + self.b) / 2
         x1 = x0
         for i in range(iterations):

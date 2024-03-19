@@ -5,6 +5,11 @@ class Tangents:
         self.function = function
 
     def tangents(self, epsilon):
+        if self.function.evaluate(self.a) * self.function.evaluate(self.b) >= 0:
+            print(
+                "Uwaga: na krańcach badanego przedziału funkcja nie ma przeciwnych znaków, brak gwarancji rozwiązania."
+            )
+
         x0 = (self.a + self.b) / 2
         derivative_at_x0 = self.function.derivative(x0)
         x1 = x0 - self.function.evaluate(x0) / derivative_at_x0
@@ -22,6 +27,11 @@ class Tangents:
         return x1, iterations
 
     def tangents_iterations(self, iterations):
+        if self.function.evaluate(self.a) * self.function.evaluate(self.b) >= 0:
+            print(
+                "Uwaga: na krańcach badanego przedziału funkcja nie ma przeciwnych znaków, brak gwarancji rozwiązania."
+            )
+
         x0 = (self.a + self.b) / 2
         precision = 0
         for i in range(iterations):
