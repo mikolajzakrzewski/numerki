@@ -17,7 +17,6 @@ class Bisection:
         while not epsilon_reached:
             iterations += 1
             x0 = x1
-            print(self.function.evaluate(self.a))
             if self.function.evaluate(self.a) * self.function.evaluate(x0) <= 0:
                 self.b = x0
             else:
