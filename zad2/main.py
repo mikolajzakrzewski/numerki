@@ -27,6 +27,19 @@ def file_read(filename):
         return None
 
 
+def det_matrix(matrix, n):
+    what_return = 0
+    if n == 1:
+        return matrix[0][0]
+    else:
+        for i in range(n):
+            pomocnicza = [row[:i] + row[i+1:] for row in matrix[1:]]
+            if i % 2 == 0:
+                what_return += matrix[0][i] * det_matrix(pomocnicza, n - 1)
+            else:
+                what_return -= matrix[0][i] * det_matrix(pomocnicza, n - 1)
+        return what_return
+
 def main():
     while True:
         print('--------------------Program do rozwiazywania układu N równań liniowych z N niewiadomymi '
@@ -50,6 +63,9 @@ def main():
 
         print("Macierz A: ")
         display_matrix(matrix)
+
+        determinant = det_matrix(matrix, num_unknowns)
+        print("Wyznacznik macierzy A:", determinant)
 
         cont = input("Czy chcesz kontynuować? (T/N): ")
         if cont.upper() != 'T':
