@@ -1,5 +1,7 @@
 import os
 
+import numpy as np
+
 
 def display_matrix(matrix):
     for row in matrix:
@@ -33,12 +35,39 @@ def det_matrix(matrix, n):
         return matrix[0][0]
     else:
         for i in range(n):
-            pomocnicza = [row[:i] + row[i+1:] for row in matrix[1:]]
+            pomocnicza = [row[:i] + row[i + 1:] for row in matrix[1:]]
             if i % 2 == 0:
                 what_return += matrix[0][i] * det_matrix(pomocnicza, n - 1)
             else:
                 what_return -= matrix[0][i] * det_matrix(pomocnicza, n - 1)
         return what_return
+
+
+def get_diagonal_matrix(matrix):
+    diagonal_matrix = np.zeros((len(matrix), len(matrix)))
+    for i in range(len(matrix)):
+        diagonal_matrix[i][i] = matrix[i][i]
+
+    return diagonal_matrix
+
+
+def get_lower_triangular_matrix(matrix):
+    lower_triangular_matrix = np.zeros((len(matrix), len(matrix)))
+    for i in range(1, len(matrix)):
+        for j in range(0, i):
+            lower_triangular_matrix[i][j] = matrix[i][j]
+
+    return lower_triangular_matrix
+
+
+def get_upper_triangular_matrix(matrix):
+    upper_triangular_matrix = np.zeros((len(matrix), len(matrix)))
+    for i in range(len(matrix) - 1):
+        for j in range(1 + i, len(matrix)):
+            upper_triangular_matrix[i][j] = matrix[i][j]
+
+    return upper_triangular_matrix
+
 
 def main():
     while True:
@@ -63,6 +92,18 @@ def main():
 
         print("Macierz A: ")
         display_matrix(matrix)
+
+        print("Macierz D")
+        diagonal_matrix = get_diagonal_matrix(matrix)
+        display_matrix(diagonal_matrix)
+
+        print("Macierz L")
+        lower_triangular_matrix = get_lower_triangular_matrix(matrix)
+        display_matrix(lower_triangular_matrix)
+
+        print("Macierz U")
+        upper_triangular_matrix = get_upper_triangular_matrix(matrix)
+        display_matrix(upper_triangular_matrix)
 
         determinant = det_matrix(matrix, num_unknowns)
         print("Wyznacznik macierzy A:", determinant)
