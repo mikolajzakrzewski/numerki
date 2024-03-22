@@ -43,6 +43,60 @@ def det_matrix(matrix, n):
         return what_return
 
 
+def get_cofactors_matrix(matrix):
+    cofactors_matrix = np.zeros((len(matrix), len(matrix)))
+    for i in range(len(matrix)):
+        for j in range(len(matrix)):
+            multiplier = -1
+            for k in range(i + j + 1):
+                multiplier *= -1
+
+            reduced_matrix = np.delete(np.delete(matrix, i, 0), j, 1)
+            if len(reduced_matrix) == 2:
+                cofactor = multiplier * get_2x2_determinant(reduced_matrix)
+                cofactors_matrix[i][j] = cofactor
+            elif len(reduced_matrix) == 3:
+                cofactor = multiplier * get_3x3_determinant(reduced_matrix)
+                cofactors_matrix[i][j] = cofactor
+
+    return cofactors_matrix
+
+
+def get_2x2_determinant(matrix):
+    determinant = matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]
+    return determinant
+
+
+def get_3x3_determinant(matrix):
+    determinant = 0
+    for i in range(len(matrix)):
+        multiplier = matrix[0][i]
+        reduced_matrix = np.delete(np.delete(matrix, 0, 0), i, 1)
+        if i % 2 == 0:
+            determinant += multiplier * get_2x2_determinant(reduced_matrix)
+        else:
+            determinant -= multiplier * get_2x2_determinant(reduced_matrix)
+
+    return determinant
+
+
+def get_adjoint_matrix(matrix):
+    cofactors_matrix = get_cofactors_matrix(matrix)
+    adjoint_matrix = np.transpose(cofactors_matrix)
+    return adjoint_matrix
+
+
+def get_inverse_matrix(matrix):
+    inverse_matrix = np.zeros((len(matrix), len(matrix)))
+    adjoint_matrix = get_adjoint_matrix(matrix)
+    det = det_matrix(matrix, len(matrix))
+    for i in range(len(matrix)):
+        for j in range(len(matrix)):
+            inverse_matrix[i][j] = adjoint_matrix[i][j] / det
+
+    return inverse_matrix
+
+
 def get_diagonal_matrix(matrix):
     diagonal_matrix = np.zeros((len(matrix), len(matrix)))
     for i in range(len(matrix)):
@@ -107,6 +161,16 @@ def main():
 
         determinant = det_matrix(matrix, num_unknowns)
         print("Wyznacznik macierzy A:", determinant)
+
+        cofactors_matrix = get_cofactors_matrix(matrix)
+        print("Macierz wyznaczników: ")
+        print(cofactors_matrix)
+        print("Adjoint matrix: ")
+        print(get_adjoint_matrix(cofactors_matrix))
+
+        inverse_matrix = get_inverse_matrix(matrix)
+        print("Macierz odwrotna: ")
+        print(inverse_matrix)
 
         cont = input("Czy chcesz kontynuować? (T/N): ")
         if cont.upper() != 'T':
