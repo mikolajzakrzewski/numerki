@@ -9,24 +9,25 @@ def display_matrix(matrix):
 
 
 def file_read(filename):
-    try:
-        with open(filename, 'r') as file:
-            num_unknowns = int(file.readline().strip())
+    # try:
+    with open(filename, 'r') as file:
+        num_unknowns = int(file.readline().strip())
 
-            matrix_line = file.readline().strip().split()
-            matrix = [list(map(float, matrix_line[i:i + num_unknowns])) for i in
-                      range(0, len(matrix_line), num_unknowns)]
+        matrix_line = file.readline().strip().split()
+        matrix = [list(map(float, matrix_line[i:i + num_unknowns])) for i in
+                  range(0, len(matrix_line), num_unknowns)]
 
-            vector = list(map(float, file.readline().strip().split()))
-            matrix = np.array(matrix)
-            return num_unknowns, matrix, vector
+        vector = list(map(float, file.readline().strip().split()))
+        vector = np.array(vector)
+        matrix = np.array(matrix)
+        return num_unknowns, matrix, vector
 
-    except FileNotFoundError:
-        print("pliku nie znaleziono.")
-        return None
-    except ValueError:
-        print("blad w danych w pliku")
-        return None
+    # except FileNotFoundError:
+    #     print("Pliku nie znaleziono.")
+    #     return None
+    # except ValueError:
+    #     print("Błąd w danych w pliku")
+    #     return None
 
 
 def det_matrix(matrix, n):
@@ -143,6 +144,9 @@ def get_upper_triangular_matrix(matrix):
 
 def get_t_matrix(matrix):
     inverse_diagonal_matrix = get_inverse_matrix(get_diagonal_matrix(matrix))
+    for i in range(len(inverse_diagonal_matrix)):
+        for j in range(len(inverse_diagonal_matrix)):
+            inverse_diagonal_matrix[i][j] *= -1
     lower_triangular_matrix = get_lower_triangular_matrix(matrix)
     upper_triangular_matrix = get_upper_triangular_matrix(matrix)
     lower_triangular_matrix_plus_upper_triangular_matrix = np.zeros((len(matrix), len(matrix)))
@@ -156,7 +160,7 @@ def get_t_matrix(matrix):
 
 
 def get_c_matrix(matrix, b):
-    inverse_diagonal_matrix = get_inverse_matrix(matrix)
+    inverse_diagonal_matrix = get_inverse_matrix(get_diagonal_matrix(matrix))
     c_matrix = np.matmul(inverse_diagonal_matrix, b)
     return c_matrix
 
@@ -165,9 +169,9 @@ def jacobian_iteration(matrix, b, x):
     t_matrix = get_t_matrix(matrix)
     c_matrix = get_c_matrix(matrix, b)
     t_and_x_multiplied = np.matmul(t_matrix, x)
-    new_x = np.zeros((len(x), 0))
+    new_x = np.zeros((len(x), 1))
     for i in range(len(x)):
-        new_x[i][0] = t_and_x_multiplied[i][0] + c_matrix[i][0]
+        new_x[i] = t_and_x_multiplied[i] + c_matrix[i]
     return new_x
 
 
@@ -223,6 +227,15 @@ def main():
         t_matrix = get_t_matrix(matrix)
         print("Macierz T:")
         print(t_matrix)
+
+        x = np.zeros(len(vector))
+        print(x)
+        print(vector)
+        x1 = jacobian_iteration(matrix, vector, x)
+
+        for i in range(1000):
+            x1 = jacobian_iteration(matrix, vector, x1)
+        print(x1)
 
         cont = input("Czy chcesz kontynuować? (T/N): ")
         if cont.upper() != 'T':
