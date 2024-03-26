@@ -2,6 +2,7 @@ import os
 
 import numpy as np
 import matrix_operations as mo
+import jacobi_method as jm
 
 
 def file_read(filename):
@@ -24,16 +25,6 @@ def file_read(filename):
     # except ValueError:
     #     print("Błąd w danych w pliku")
     #     return None
-
-
-def jacobian_iteration(matrix, b, x):
-    t_matrix = mo.get_t_matrix(matrix)
-    c_matrix = mo.get_c_matrix(matrix, b)
-    t_and_x_multiplied = np.matmul(t_matrix, x)
-    new_x = np.zeros((len(x), 1))
-    for i in range(len(x)):
-        new_x[i] = t_and_x_multiplied[i] + c_matrix[i]
-    return new_x
 
 
 def main():
@@ -92,11 +83,11 @@ def main():
         x = np.zeros(len(vector))
         print(x)
         print(vector)
-        x1 = jacobian_iteration(matrix, vector, x)
-
-        for i in range(1000):
-            x1 = jacobian_iteration(matrix, vector, x1)
+        x1 = jm.solve_iterations(matrix, vector, x, 300)
         print(x1)
+
+        x2 = jm.solve_precision(matrix, vector, x, 0.00001)
+        print(x2)
 
         cont = input("Czy chcesz kontynuować? (T/N): ")
         if cont.upper() != 'T':
