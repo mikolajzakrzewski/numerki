@@ -101,3 +101,28 @@ def get_c_matrix(matrix, b):
     inverse_diagonal_matrix = get_inverse_matrix(get_diagonal_matrix(matrix))
     c_matrix = np.matmul(inverse_diagonal_matrix, b)
     return c_matrix
+
+
+def get_augmented_matrix(matrix, b):
+    augmented_matrix = np.zeros((len(matrix), len(matrix) + 1))
+    for i in range(len(augmented_matrix)):
+        for j in range(augmented_matrix.shape[1]):
+            if j == len(augmented_matrix):
+                augmented_matrix[i][j] = b[i]
+            else:
+                augmented_matrix[i][j] = matrix[i][j]
+
+    return augmented_matrix
+
+
+def check_solutions_number(matrix, b):
+    augmented_matrix = get_augmented_matrix(matrix, b)
+    matrix_rank = np.linalg.matrix_rank(matrix)
+    augmented_matrix_rank = np.linalg.matrix_rank(augmented_matrix)
+    unknowns_number = len(matrix)
+    if matrix_rank == augmented_matrix_rank and matrix_rank == unknowns_number:
+        return 1
+    elif matrix_rank == augmented_matrix_rank and matrix_rank < unknowns_number:
+        return float('inf')
+    else:
+        return 0
