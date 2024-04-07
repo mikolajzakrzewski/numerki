@@ -1,6 +1,8 @@
 import os
 
 import numpy as np
+
+import jacobi_method
 import matrix_operations as mo
 import jacobi_method as jm
 
@@ -81,13 +83,30 @@ def main():
         print(t_matrix)
 
         x = np.zeros(len(vector))
-        print(x)
-        print(vector)
         x1 = jm.solve_iterations(matrix, vector, x, 300)
-        print(x1)
 
         x2 = jm.solve_precision(matrix, vector, x, 0.00001)
-        print(x2)
+
+        print('Wybierz warunek stopu:\n1. Zadana dokładność\n2. Metoda iteracyjna')
+        while True:
+            method_choice = input()
+            if method_choice == '1':
+                print('Podaj epsilon:')
+                epsilon = float(input())
+                result_epsilon = jacobi_method.solve_precision(matrix, vector, x, epsilon)
+                print("Wynik: Macierz x: ")
+                print(result_epsilon)
+                break
+
+            elif method_choice == '2':
+                print('Podaj liczbę iteracji:')
+                iterations = int(input())
+                result_iterations = jacobi_method.solve_iterations(matrix, vector, x, iterations)
+                print("Wynik: Macierz x: ")
+                print(result_iterations)
+                break
+            else:
+                print('Niepoprawny wybór. Wybierz jeszcze raz.')
 
         cont = input("Czy chcesz kontynuować? (T/N): ")
         if cont.upper() != 'T':
