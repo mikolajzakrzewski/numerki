@@ -22,14 +22,17 @@ def file_read(filename):
 def manual_matrix_input():
     print("Wprowadź wymiar macierzy:")
     num_unknowns = int(input())
+    matrix = np.zeros([num_unknowns, num_unknowns])
 
-    print("Wprowadź wartości elementów macierzy:")
-    matrix_input = [float(x) for x in input().split()]
+    for i in range(num_unknowns):
+        print("Wprowadź wartości elementów " + str(i + 1) + " rzędu macierzy oddzielone spacjami:")
+        matrix_input = [float(x) for x in input().split()]
+        matrix[i] = matrix_input
 
-    matrix = [matrix_input[i:i + num_unknowns] for i in range(0, len(matrix_input), num_unknowns)]
     vector = [float(x) for x in input("Wprowadź wektor wynikowy oddzielony spacjami: ").split()]
 
     return num_unknowns, np.array(matrix), np.array(vector)
+
 
 def main():
     while True:
@@ -59,6 +62,10 @@ def main():
             print('Niepoprawny wybór. Wybierz jeszcze raz.')
             continue
 
+        print('Wybrana macierz:')
+        print(matrix)
+        print('Wektor rozwiązań:')
+        print(vector)
         print('Wybierz warunek stopu:\n1. Zadana dokładność\n2. Metoda iteracyjna')
         while True:
             method_choice = input()
@@ -76,7 +83,7 @@ def main():
                 iterations = int(input())
                 result_iterations = jacobi_method.solve_iterations(matrix, vector, x, iterations)
                 if result_iterations is not None:
-                    print("Wynik: Macierz x: ")
+                    print("Wektor rozwiązań:")
                     print(result_iterations)
                 break
             else:
