@@ -53,13 +53,21 @@ def solve_iterations(matrix, b, x, iterations):
     return x_i
 
 
+def precision_reached_check(x_i, x_i_1, precision):
+    for i in range(len(x_i)):
+        if abs(x_i_1[i] - x_i[i]) > precision:
+            return False
+
+    return True
+
+
 def solve_precision(matrix, b, x, precision):
     if not check_matrix(matrix, b):
         return None
 
     x_i = x
     x_i_1 = iteration(matrix, b, x_i)
-    while abs(np.sum(x_i_1) - np.sum(x_i)) > precision:
+    while not precision_reached_check(x_i, x_i_1, precision):
         x_i = x_i_1
         x_i_1 = iteration(matrix, b, x_i)
 
