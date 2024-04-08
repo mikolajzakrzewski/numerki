@@ -74,7 +74,7 @@ def main():
                 epsilon = float(input())
                 result_epsilon = jacobi_method.solve_precision(matrix, vector, x, epsilon)
                 if result_epsilon is not None:
-                    print("Wynik: Macierz x: ")
+                    print("Wektor rozwiązań:")
                     print(result_epsilon)
                 break
 
