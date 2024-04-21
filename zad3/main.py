@@ -6,9 +6,10 @@ import PolynomialFunction
 import CompositeFunction
 
 import numpy as np
+import matplotlib.pyplot as plt
 
 
-def get_nodes(a, b, k):
+def get_chebyshev_nodes(a, b, k):
     nodes = np.zeros(k)
     for i in range(k):
         node = ((a + b) / 2) + ((b - a) / 2) * np.cos((((2 * i) + 1) * np.pi) / (2 * k))
@@ -16,23 +17,58 @@ def get_nodes(a, b, k):
     return nodes
 
 
-def divided_diff(a, b, k, function):
-    nodes_x_coordinates = get_nodes(a, b, k)
-    n = len(nodes_x_coordinates)
-    nodes_y_coordinates = np.zeros(n)
+def divided_difference(a, b, k, function):
+    nodes_x_values = get_chebyshev_nodes(a, b, k)
+    n = len(nodes_x_values)
+    nodes_y_values = np.zeros(n)
     for i in range(n):
-        nodes_y_coordinates[i] = function.evaluate(nodes_x_coordinates[i])
+        nodes_y_values[i] = function.evaluate(nodes_x_values[i])
 
     coefficients = np.zeros([n, n])
-    coefficients[:, 0] = nodes_y_coordinates
+    coefficients[:, 0] = nodes_y_values
     for i in range(1, n):
         for j in range(n - i):
             coefficients[j, i] = (
-                    coefficients[j + 1, i - 1] - coefficients[j, i - 1] /
-                    (nodes_x_coordinates[j + i] - nodes_x_coordinates[j])
+                (coefficients[j + 1, i - 1] - coefficients[j, i - 1]) /
+                (nodes_x_values[j + i] - nodes_x_values[j])
             )
 
     return coefficients[0]
+
+
+def newton_polynomial_evaluate(x_to_evaluate, x_values, coefficients):
+    n = len(x_values)
+    result = 0
+    for i in range(n):
+        term = coefficients[i]
+        for j in range(i):
+            term *= (x_to_evaluate - x_values[j])
+        result += term
+    return result
+
+
+def plot_function(range_start, range_end, function_to_plot,
+                  chebyshev_x_values, coefficients,
+                  x_values_to_evaluate, evaluated_y_values):
+    x = np.linspace(range_start, range_end, 10000)
+    plt.figure(figsize=(8, 8))
+    plt.plot(
+        x, function_to_plot.evaluate(x), label='Wykres funkcji oryginalnej'
+    )
+    plt.plot(
+        x, newton_polynomial_evaluate(x, chebyshev_x_values, coefficients), label='Wykres wielomianu interpolującego'
+    )
+    chebyshev_y_values = np.zeros(len(chebyshev_x_values))
+    for i in range(len(chebyshev_x_values)):
+        chebyshev_y_values[i] = function_to_plot.evaluate(chebyshev_x_values[i])
+
+    plt.scatter(chebyshev_x_values, chebyshev_y_values, label='Węzły Czebyszewa')
+    plt.scatter(x_values_to_evaluate, evaluated_y_values, label='Obliczone punkty')
+    plt.xlabel('x', fontsize=14)
+    plt.ylabel('y', fontsize=14)
+    plt.legend(loc='upper left')
+    plt.grid()
+    plt.show()
 
 
 def function_choice():
@@ -77,6 +113,15 @@ def nodes_number_choice():
     return nodes_number
 
 
+def x_values_choice():
+    number_of_x_values = int(input('Podal liczbę punktów x do wyliczenia: '))
+    x_values = np.zeros(number_of_x_values)
+    for i in range(number_of_x_values):
+        x_values[i] = (float(input('Podaj wartość punktu nr ' + str(i + 1) + ': ')))
+
+    return x_values
+
+
 def main():
     while True:
         print('Wybierz rodzaj funkcji: \n1. Pojedyncza\n2. Złożona')
@@ -98,8 +143,19 @@ def main():
 
         a, b = range_choice()
         k = nodes_number_choice()
-        print(divided_diff(a, b, k, function))
-        # TODO
+        coefficients = divided_difference(a, b, k, function)
+        chebyshev_x_values = get_chebyshev_nodes(a, b, k)
+
+        x_values = x_values_choice()
+        evaluated_y_values = np.zeros(len(x_values))
+        for i in range(len(evaluated_y_values)):
+            evaluated_y_values[i] = newton_polynomial_evaluate(x_values[i], chebyshev_x_values, coefficients)
+
+        plot_function(a, b, function, chebyshev_x_values, coefficients, x_values, evaluated_y_values)
+        print('Wartości wielomianu interpolującego dla zadanych punktów:')
+        for i in range(len(evaluated_y_values)):
+            print('x = ' + str(x_values[i]) + ', y = ' + str(evaluated_y_values[i]))
+
         cont = input("Czy chcesz kontynuować? (T/N): ")
         if cont.upper() != 'T':
             break
