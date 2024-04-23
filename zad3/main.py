@@ -1,3 +1,4 @@
+import AbsoluteValue
 import SineFunction
 import CosineFunction
 import TangentFunction
@@ -98,6 +99,8 @@ def function_choice():
                 coefficients.append(float(input()))
 
             return PolynomialFunction.PolynomialFunction(coefficients)
+        elif chosen_function == '4':
+            return AbsoluteValue.AbsoluteValue()
         else:
             print('Niepoprawny wybór. Wybierz jeszcze raz.')
 
@@ -128,13 +131,13 @@ def main():
         while True:
             choice = input()
             if choice == '1':
-                print('Wybierz funkcję: \n1. Trygonometryczna\n2. Wykładnicza\n3. Wielomian')
+                print('Wybierz funkcję: \n1. Trygonometryczna\n2. Wykładnicza\n3. Wielomian\n4. Moduł')
                 function = function_choice()
                 break
             elif choice == '2':
-                print('Wybierz pierwszą funkcję: \n1. Trygonometryczna\n2. Wykładnicza\n3. Wielomian')
+                print('Wybierz pierwszą funkcję: \n1. Trygonometryczna\n2. Wykładnicza\n3. Wielomian\n4. Moduł')
                 function_1 = function_choice()
-                print('Wybierz drugą funkcję: \n1. Trygonometryczna\n2. Wykładnicza\n3. Wielomian')
+                print('Wybierz drugą funkcję: \n1. Trygonometryczna\n2. Wykładnicza\n3. Wielomian\n4. Moduł')
                 function_2 = function_choice()
                 function = CompositeFunction.CompositeFunction(function_1, function_2)
                 break
