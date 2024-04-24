@@ -50,7 +50,7 @@ def newton_polynomial_evaluate(x_to_evaluate, x_values, coefficients):
 
 def plot_function(range_start, range_end, function_to_plot,
                   chebyshev_x_values, coefficients,
-                  x_values_to_evaluate, evaluated_y_values):
+                  x_values_to_evaluate, evaluated_y_values, limit_y):
     x = np.linspace(range_start, range_end, 10000)
     plt.figure(figsize=(8, 8))
     plt.plot(
@@ -65,6 +65,15 @@ def plot_function(range_start, range_end, function_to_plot,
 
     plt.scatter(chebyshev_x_values, chebyshev_y_values, label='Węzły Czebyszewa')
     plt.scatter(x_values_to_evaluate, evaluated_y_values, label='Obliczone punkty')
+
+    if limit_y == 1:
+        y_values = np.zeros(len(x))
+        for i in range(len(y_values)):
+            y_values[i] = function_to_plot.evaluate(x[i])
+
+        median = np.median(y_values)
+        plt.ylim(median - 100, median + 100)
+
     plt.xlabel('x', fontsize=14)
     plt.ylabel('y', fontsize=14)
     plt.legend(loc='upper left')
@@ -154,7 +163,11 @@ def main():
         for i in range(len(evaluated_y_values)):
             evaluated_y_values[i] = newton_polynomial_evaluate(x_values[i], chebyshev_x_values, coefficients)
 
-        plot_function(a, b, function, chebyshev_x_values, coefficients, x_values, evaluated_y_values)
+        limit_y = int(input('Czy chcesz ustawić limit na osi OY? (środkowa wartość - 100, środkowa wartość + 100)'
+                            '\n 0 – nie'
+                            '\n 1 – tak'
+                            '\n'))
+        plot_function(a, b, function, chebyshev_x_values, coefficients, x_values, evaluated_y_values, limit_y)
         print('Wartości wielomianu interpolującego dla zadanych punktów:')
         for i in range(len(evaluated_y_values)):
             print('x = ' + str(x_values[i]) + ', y = ' + str(evaluated_y_values[i]))
