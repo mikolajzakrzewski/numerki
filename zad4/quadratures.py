@@ -36,5 +36,7 @@ def gauss_laguerre(n, function):
     ]
 
     result = 0
-    # TODO: calculate result
+    for i in range(n + 2):
+        result += weights[n][i] * function.evaluate(nodes[n][i])
+
     return result
