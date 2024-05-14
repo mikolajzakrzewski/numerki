@@ -89,16 +89,8 @@ def main():
             print(total_integral)
 
         print('Kwadratura Gaussa-Laguerre\'a:')
-        previous_laguerre = qu.gauss_laguerre(0, function)
-        print(f'Liczba węzłów: {2} – ', previous_laguerre)
-        for i in range(1, 4):
-            current_laguerre = qu.gauss_laguerre(i, function)
-            print(f'Liczba węzłów: {i + 2} – ', current_laguerre)
-            if abs(current_laguerre - previous_laguerre) < e:
-                break
-
-            else:
-                previous_laguerre = current_laguerre
+        for i in range(4):
+            print(f'Liczba węzłów: {i + 2} – ', qu.gauss_laguerre(i, function))
 
         cont = input("Czy chcesz kontynuować? (T/N): ")
         if cont.upper() != 'T':
