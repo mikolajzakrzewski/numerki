@@ -70,9 +70,7 @@ def main():
             b = float(input('Podaj koniec przedziału b: '))
             print('Metoda Simpsona:')
             print(qu.simpson(a, b, function))
-            print('Kwadratura Gaussa-Laguerre\'a:')
-            for i in range(4):
-                print(f'Liczba węzłów: {i + 2} – ', qu.gauss_laguerre(i, function))
+
         else:
             a = 0
             b = 1
@@ -89,9 +87,18 @@ def main():
 
             print(f'Liczba przedziałów: {n}')
             print(total_integral)
-            print('Kwadratura Gaussa-Laguerre\'a:')
-            for i in range(4):
-                print(f'Liczba węzłów: {i + 2} – ', qu.gauss_laguerre(i, function))
+
+        print('Kwadratura Gaussa-Laguerre\'a:')
+        previous_laguerre = qu.gauss_laguerre(0, function)
+        print(f'Liczba węzłów: {2} – ', previous_laguerre)
+        for i in range(1, 4):
+            current_laguerre = qu.gauss_laguerre(i, function)
+            print(f'Liczba węzłów: {i + 2} – ', current_laguerre)
+            if abs(current_laguerre - previous_laguerre) < e:
+                break
+
+            else:
+                previous_laguerre = current_laguerre
 
         cont = input("Czy chcesz kontynuować? (T/N): ")
         if cont.upper() != 'T':
