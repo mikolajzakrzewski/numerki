@@ -21,19 +21,29 @@ def composite_simpson(a, b, function, n):
 
 
 def gauss_laguerre(n, function):
-    weights = [
-        [0.853553, 0.146447, 0, 0, 0],
-        [0.711093, 0.278518, 0.0103893, 0, 0],
-        [0.603154, 0.357419, 0.0388879, 0.000539295, 0],
-        [0.521756, 0.398667, 0.0759424, 0.00361176, 0.00002337]
-    ]
+    weights = []
+    nodes = []
+    with open('laguerre.txt', 'r') as f:
+        i = 2
+        j = 0
+        temp_weights = []
+        temp_nodes = []
+        for line in f:
+            if line.startswith('n') or line.strip() == '':
+                continue
 
-    nodes = [
-        [0.585786, 3.41421, 0, 0, 0],
-        [0.415775, 2.29428, 6.28995, 0, 0],
-        [0.322548, 1.74576, 4.53662, 9.39507, 0],
-        [0.26356, 1.4134, 3.59643, 7.08581, 12.6408]
-    ]
+            else:
+                values = line.strip().split()
+                temp_weights.append(float(values[0]))
+                temp_nodes.append(float(values[1]))
+                j += 1
+                if j == i:
+                    weights.append(temp_weights.copy())
+                    temp_weights.clear()
+                    nodes.append(temp_nodes.copy())
+                    temp_nodes.clear()
+                    i += 1
+                    j = 0
 
     result = 0
     for i in range(n + 2):
