@@ -1,8 +1,11 @@
+import numpy as np
+
+
 def simpson(a, b, function):
     h = (b - a) / 2
-    result = h / 3 * (function.evaluate(a) +
-                      4 * function.evaluate(a + h) +
-                      function.evaluate(b))
+    result = h / 3 * (function.evaluate(a) * np.exp(-a) +
+                      4 * function.evaluate(a + h) * np.exp(-(a + h)) +
+                      function.evaluate(b) * np.exp(-b))
     return result
 
 
