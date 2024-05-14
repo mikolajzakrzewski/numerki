@@ -74,18 +74,21 @@ def main():
             for i in range(4):
                 print(f'Liczba węzłów: {i + 2} – ', qu.gauss_laguerre(i, function))
         else:
-            a = float(input('Podaj początek przedziału a: '))
-            b = float(input('Podaj koniec przedziału b: '))
+            a = 0
+            b = 1
             print('Metoda Simpsona:')
             n = 2
             current_integral = qu.composite_simpson(a, b, function, n)
-            previous_integral = 0
-            while abs(current_integral - previous_integral) > e:
-                previous_integral = current_integral
+            total_integral = 0
+            while abs(current_integral) > e:
                 n += 1
-                current_integral = qu.composite_simpson(a, b, function, n)
+                current_integral = qu.simpson(a, b, function)
+                total_integral += current_integral
+                a = b
+                b = b + 1
 
-            print(current_integral)
+            print(f'Liczba przedziałów: {n}')
+            print(total_integral)
             print('Kwadratura Gaussa-Laguerre\'a:')
             for i in range(4):
                 print(f'Liczba węzłów: {i + 2} – ', qu.gauss_laguerre(i, function))
