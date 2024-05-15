@@ -6,6 +6,19 @@ import ExponentialFunction
 import PolynomialFunction
 import CompositeFunction
 import quadratures as qu
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+def plot_function(range_start, range_end, function_to_plot):
+    x = np.linspace(range_start, range_end, 10000)
+    plt.figure(figsize=(8, 8))
+    plt.plot(x, function_to_plot.evaluate(x), label='Wykres funkcji f(x)')
+    plt.xlabel('x', fontsize=14)
+    plt.ylabel('y', fontsize=14)
+    plt.legend(loc='upper right')
+    plt.grid()
+    plt.show()
 
 
 def function_choice():
@@ -70,6 +83,7 @@ def main():
             b = float(input('Podaj koniec przedziału b: '))
             print('Metoda Simpsona:')
             print(qu.simpson(a, b, function))
+            plot_function(a, b, function)
 
         else:
             a = 0
@@ -87,6 +101,7 @@ def main():
 
             print(f'Liczba przedziałów: {n}')
             print(total_integral)
+            plot_function(0, 20, function)
 
         print('Kwadratura Gaussa-Laguerre\'a:')
         for i in range(4):
