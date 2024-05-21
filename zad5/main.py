@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.integrate import quad
 
 from AbsoluteValue import AbsoluteValue
 from SineFunction import SineFunction
@@ -9,6 +8,26 @@ from TangentFunction import TangentFunction
 from ExponentialFunction import ExponentialFunction
 from PolynomialFunction import PolynomialFunction
 from CompositeFunction import CompositeFunction
+
+
+def simpson(a, b, function):
+    h = (b - a) / 2
+    result = h / 3 * (function(a) * np.exp(-a) +
+                      4 * function(a + h) * np.exp(-(a + h)) +
+                      function(b) * np.exp(-b))
+    return result
+
+
+def composite_simpson(a, b, function, n):
+    result = 0
+    h = (b - a) / n
+    for i in range(n):
+        x = a + i * h
+        x_1 = a + (i + 1) * h
+        result += simpson(x, x_1, function)
+
+    return result
+
 
 def gauss_laguerre_nodes_weights(n):
     weights = []
@@ -35,11 +54,13 @@ def gauss_laguerre_nodes_weights(n):
                     j = 0
     return nodes[n], weights[n]
 
+
 def hermite_coefficients(func, degree, num_nodes):
     nodes, weights = gauss_laguerre_nodes_weights(num_nodes)
     values = np.array([func.evaluate(node) for node in nodes])
-    H = np.polynomial.hermite.Hermite.fit(nodes, values, degree, w=weights)
-    return H.convert().coef
+    h = np.polynomial.hermite.Hermite.fit(nodes, values, degree, w=weights)
+    return h.convert().coef
+
 
 def function_choice():
     while True:
@@ -73,6 +94,7 @@ def function_choice():
         else:
             print('Niepoprawny wybór. Wybierz jeszcze raz.')
 
+
 def range_choice():
     print('Podaj początek przedziału a:')
     start = float(input())
@@ -81,11 +103,11 @@ def range_choice():
     return start, end
 
 
-#wzialem to z chata bo chuj wie jak ten blad liczyc, nwm nawet co to ta lambda
-def approximation_error(func, approx_func, a, b):
+def approximation_error(func, approx_func, a, b, n):
     error_func = lambda x: (func.evaluate(x) - approx_func(x)) ** 2
-    error, _ = quad(error_func, a, b)
+    error = composite_simpson(a, b, error_func, n)
     return np.sqrt(error)
+
 
 def main():
     while True:
@@ -115,7 +137,7 @@ def main():
 
         approx_func = np.polynomial.hermite.Hermite(coefficients).convert()
 
-        error = approximation_error(function, approx_func, a, b)
+        error = approximation_error(function, approx_func, a, b, 5)
         print(f'Błąd aproksymacji: {error}')
 
         x = np.linspace(a, b, 400)
@@ -131,6 +153,7 @@ def main():
         cont = input("Czy chcesz kontynuować? (T/N): ")
         if cont.upper() != 'T':
             break
+
 
 if __name__ == '__main__':
     main()
