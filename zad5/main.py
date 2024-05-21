@@ -29,34 +29,8 @@ def composite_simpson(a, b, function, n):
     return result
 
 
-def gauss_laguerre_nodes_weights(n):
-    weights = []
-    nodes = []
-    with open('laguerre.txt', 'r') as f:
-        i = 2
-        j = 0
-        temp_weights = []
-        temp_nodes = []
-        for line in f:
-            if line.startswith('n') or line.strip() == '':
-                continue
-            else:
-                values = line.strip().split()
-                temp_weights.append(float(values[0]))
-                temp_nodes.append(float(values[1]))
-                j += 1
-                if j == i:
-                    weights.append(temp_weights.copy())
-                    temp_weights.clear()
-                    nodes.append(temp_nodes.copy())
-                    temp_nodes.clear()
-                    i += 1
-                    j = 0
-    return nodes[n], weights[n]
-
-
 def hermite_coefficients(func, degree, num_nodes):
-    nodes, weights = gauss_laguerre_nodes_weights(num_nodes)
+    nodes, weights = np.polynomial.hermite.hermgauss(num_nodes)
     values = np.array([func.evaluate(node) for node in nodes])
     h = np.polynomial.hermite.Hermite.fit(nodes, values, degree, w=weights)
     return h.convert().coef
@@ -131,14 +105,20 @@ def main():
         a, b = range_choice()
         degree = int(input('Podaj stopień wielomianu aproksymacyjnego: '))
         num_nodes = int(input('Podaj liczbę węzłów: '))
-
+        num_ranges = int(input('Podaj liczbę podprzedziałów do obliczania całki złożoną kwadraturą Simpsona: '))
+        desired_error = float(input('Oczekiwany błąd aproksymacji: '))
         coefficients = hermite_coefficients(function, degree, num_nodes)
-        print(f'Współczynniki wielomianu Hermite\'a: {coefficients}')
-
         approx_func = np.polynomial.hermite.Hermite(coefficients).convert()
+        calculated_error = approximation_error(function, approx_func, a, b, num_ranges)
+        while calculated_error > desired_error:
+            degree += 1
+            coefficients = hermite_coefficients(function, degree, num_nodes)
+            approx_func = np.polynomial.hermite.Hermite(coefficients).convert()
+            calculated_error = approximation_error(function, approx_func, a, b, num_ranges)
 
-        error = approximation_error(function, approx_func, a, b, 5)
-        print(f'Błąd aproksymacji: {error}')
+        print(f'Stopień wielomianu aproksymacyjnego: {degree}')
+        print(f'Współczynniki wielomianu Hermite\'a: {coefficients}')
+        print(f'Błąd aproksymacji: {calculated_error}')
 
         x = np.linspace(a, b, 400)
         y = np.array([function.evaluate(xi) for xi in x])
