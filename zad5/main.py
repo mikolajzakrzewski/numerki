@@ -12,9 +12,9 @@ from CompositeFunction import CompositeFunction
 
 def simpson(a, b, function):
     h = (b - a) / 2
-    result = h / 3 * (function(a) * np.exp(-a) +
-                      4 * function(a + h) * np.exp(-(a + h)) +
-                      function(b) * np.exp(-b))
+    result = h / 3 * (function(a) * np.exp(-a ** 2) +
+                      4 * function(a + h) * np.exp(-(a + h) ** 2) +
+                      function(b) * np.exp(-b ** 2))
     return result
 
 
@@ -29,11 +29,38 @@ def composite_simpson(a, b, function, n):
     return result
 
 
-def hermite_coefficients(func, degree, num_nodes):
-    nodes, weights = np.polynomial.hermite.hermgauss(num_nodes)
-    values = np.array([func.evaluate(node) for node in nodes])
-    h = np.polynomial.hermite.Hermite.fit(nodes, values, degree, w=weights)
-    return h.convert().coef
+def get_hermite_coefficient(k, x):
+    if k == 0:
+        return 1
+    elif k == 1:
+        return 2 * x
+    else:
+        nodes = [1, 2 * x]
+        for i in range(2, k + 1):
+            nodes.append(2 * x * nodes[i - 1] - 2 * (i - 1) * nodes[i - 2])
+
+        return nodes[k]
+
+
+def get_approximation_coefficients(a, b, function, degree, n):
+    coefficients = [((composite_simpson(a, b, lambda x: function.evaluate(x) * get_hermite_coefficient(k, x), n)) /
+                     (composite_simpson(a, b, lambda x: get_hermite_coefficient(k, x) ** 2, n)))
+                    for k in range(degree + 1)]
+
+    return coefficients
+
+
+def approximate(coefficients, x):
+    result = 0
+    for k in range(len(coefficients)):
+        result += coefficients[k] * get_hermite_coefficient(k, x)
+
+    return result
+
+
+def approximation_error(func, approx_func, a, b, n):
+    error = composite_simpson(a, b, lambda x: (func.evaluate(x) - approx_func(x)) ** 2, n)
+    return np.sqrt(error)
 
 
 def function_choice():
@@ -77,12 +104,6 @@ def range_choice():
     return start, end
 
 
-def approximation_error(func, approx_func, a, b, n):
-    error_func = lambda x: (func.evaluate(x) - approx_func(x)) ** 2
-    error = composite_simpson(a, b, error_func, n)
-    return np.sqrt(error)
-
-
 def main():
     while True:
         print('Wybierz rodzaj funkcji: \n1. Pojedyncza\n2. Złożona')
@@ -108,24 +129,19 @@ def main():
                        '2. Aproksymacja dla oczekiwanego błędu aproksymacji\n')
         if choice == '1':
             degree = int(input('Podaj stopień wielomianu aproksymacyjnego: '))
-            num_nodes = int(input('Podaj liczbę węzłów: '))
             num_ranges = int(input('Podaj liczbę podprzedziałów do obliczania całki złożoną kwadraturą Simpsona: '))
-            coefficients = hermite_coefficients(function, degree, num_nodes)
-            approx_func = np.polynomial.hermite.Hermite(coefficients).convert()
-            calculated_error = approximation_error(function, approx_func, a, b, num_ranges)
+            coefficients = get_approximation_coefficients(a, b, function, degree, num_ranges)
+            calculated_error = approximation_error(function, lambda x: approximate(coefficients, x), a, b, num_ranges)
         else:
             degree = 1
-            num_nodes = int(input('Podaj liczbę węzłów: '))
             num_ranges = int(input('Podaj liczbę podprzedziałów do obliczania całki złożoną kwadraturą Simpsona: '))
             desired_error = float(input('Oczekiwany błąd aproksymacji: '))
-            coefficients = hermite_coefficients(function, degree, num_nodes)
-            approx_func = np.polynomial.hermite.Hermite(coefficients).convert()
-            calculated_error = approximation_error(function, approx_func, a, b, num_ranges)
+            coefficients = get_approximation_coefficients(a, b, function, degree, num_ranges)
+            calculated_error = approximation_error(function, lambda x: approximate(coefficients, x), a, b, num_ranges)
             while calculated_error > desired_error:
                 degree += 1
-                coefficients = hermite_coefficients(function, degree, num_nodes)
-                approx_func = np.polynomial.hermite.Hermite(coefficients).convert()
-                calculated_error = approximation_error(function, approx_func, a, b, num_ranges)
+                coefficients = get_approximation_coefficients(a, b, function, degree, num_ranges)
+                calculated_error = approximation_error(function, lambda x: approximate(coefficients, x), a, b, num_ranges)
 
         print(f'Stopień wielomianu aproksymacyjnego: {degree}')
         print(f'Współczynniki wielomianu Hermite\'a: {coefficients}')
@@ -133,7 +149,7 @@ def main():
 
         x = np.linspace(a, b, 400)
         y = np.array([function.evaluate(xi) for xi in x])
-        y_approx = approx_func(x)
+        y_approx = np.array([approximate(coefficients, xi) for xi in x])
 
         plt.plot(x, y, label='Oryginalna funkcja')
         plt.plot(x, y_approx, label='Aproksymacja Hermite\'a')
