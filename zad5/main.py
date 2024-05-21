@@ -103,18 +103,29 @@ def main():
                 print('Niepoprawny wybór. Wybierz jeszcze raz.')
 
         a, b = range_choice()
-        degree = int(input('Podaj stopień wielomianu aproksymacyjnego: '))
-        num_nodes = int(input('Podaj liczbę węzłów: '))
-        num_ranges = int(input('Podaj liczbę podprzedziałów do obliczania całki złożoną kwadraturą Simpsona: '))
-        desired_error = float(input('Oczekiwany błąd aproksymacji: '))
-        coefficients = hermite_coefficients(function, degree, num_nodes)
-        approx_func = np.polynomial.hermite.Hermite(coefficients).convert()
-        calculated_error = approximation_error(function, approx_func, a, b, num_ranges)
-        while calculated_error > desired_error:
-            degree += 1
+        choice = input('Wybierz tryb pracy:\n'
+                       '1. Aproksymacja dla zadanego stopnia wielomianu aproksymacyjnego\n'
+                       '2. Aproksymacja dla oczekiwanego błędu aproksymacji\n')
+        if choice == '1':
+            degree = int(input('Podaj stopień wielomianu aproksymacyjnego: '))
+            num_nodes = int(input('Podaj liczbę węzłów: '))
+            num_ranges = int(input('Podaj liczbę podprzedziałów do obliczania całki złożoną kwadraturą Simpsona: '))
             coefficients = hermite_coefficients(function, degree, num_nodes)
             approx_func = np.polynomial.hermite.Hermite(coefficients).convert()
             calculated_error = approximation_error(function, approx_func, a, b, num_ranges)
+        else:
+            degree = 1
+            num_nodes = int(input('Podaj liczbę węzłów: '))
+            num_ranges = int(input('Podaj liczbę podprzedziałów do obliczania całki złożoną kwadraturą Simpsona: '))
+            desired_error = float(input('Oczekiwany błąd aproksymacji: '))
+            coefficients = hermite_coefficients(function, degree, num_nodes)
+            approx_func = np.polynomial.hermite.Hermite(coefficients).convert()
+            calculated_error = approximation_error(function, approx_func, a, b, num_ranges)
+            while calculated_error > desired_error:
+                degree += 1
+                coefficients = hermite_coefficients(function, degree, num_nodes)
+                approx_func = np.polynomial.hermite.Hermite(coefficients).convert()
+                calculated_error = approximation_error(function, approx_func, a, b, num_ranges)
 
         print(f'Stopień wielomianu aproksymacyjnego: {degree}')
         print(f'Współczynniki wielomianu Hermite\'a: {coefficients}')
