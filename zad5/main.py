@@ -124,24 +124,10 @@ def main():
                 print('Niepoprawny wybór. Wybierz jeszcze raz.')
 
         a, b = range_choice()
-        choice = input('Wybierz tryb pracy:\n'
-                       '1. Aproksymacja dla zadanego stopnia wielomianu aproksymacyjnego\n'
-                       '2. Aproksymacja dla oczekiwanego błędu aproksymacji\n')
-        if choice == '1':
-            degree = int(input('Podaj stopień wielomianu aproksymacyjnego: '))
-            num_ranges = int(input('Podaj liczbę podprzedziałów do obliczania całki złożoną kwadraturą Simpsona: '))
-            coefficients = get_approximation_coefficients(a, b, function, degree, num_ranges)
-            calculated_error = approximation_error(function, lambda x: approximate(coefficients, x), a, b, num_ranges)
-        else:
-            degree = 1
-            num_ranges = int(input('Podaj liczbę podprzedziałów do obliczania całki złożoną kwadraturą Simpsona: '))
-            desired_error = float(input('Oczekiwany błąd aproksymacji: '))
-            coefficients = get_approximation_coefficients(a, b, function, degree, num_ranges)
-            calculated_error = approximation_error(function, lambda x: approximate(coefficients, x), a, b, num_ranges)
-            while calculated_error > desired_error:
-                degree += 1
-                coefficients = get_approximation_coefficients(a, b, function, degree, num_ranges)
-                calculated_error = approximation_error(function, lambda x: approximate(coefficients, x), a, b, num_ranges)
+        degree = int(input('Podaj stopień wielomianu aproksymacyjnego: '))
+        num_ranges = int(input('Podaj liczbę podprzedziałów do obliczania całki złożoną kwadraturą Simpsona: '))
+        coefficients = get_approximation_coefficients(a, b, function, degree, num_ranges)
+        calculated_error = approximation_error(function, lambda x: approximate(coefficients, x), a, b, num_ranges)
 
         print(f'Stopień wielomianu aproksymacyjnego: {degree}')
         print(f'Współczynniki wielomianu Hermite\'a: {coefficients}')
